@@ -24,33 +24,41 @@ insert into notas values
 ('FICA-1',12345678,'7.5')
 -- where cod_materia = materia.cod_materia;
 
+
 DELIMITER $$
 
 create procedure sp_insertNotas(in codMate char(10), in _carnet int, in nota double)
 begin
 	declare carnet_alum int;
+    declare cMat char(10);
+    
     declare exit handler for sqlexception
         begin
-        rollback;
-			select 'ERROR' as Mensaje, 'El carnet no existe en la bd';
+        rollback;        
+			 select 'ERROR' as Mensaje, 'El carnet o codigo de materia ingresado no existe en la BD';            
         end;
+        
     start transaction;
+    
     set carnet_alum = (select carnet from alumno where carnet=_carnet); 
+    
     if(carnet_alum=null) then
 		select 'ERROR' as Mensaje, 'Error en la operacion';        
 	else
-		set @cMat = (select cod_materia from materia where cod_materia=codMate);
+		set cMat = (select cod_materia from materia where cod_materia=codMate);
 		
-		if(@cMat=null) then
-			select 'ERROR' as Mensaje, 'El codigo de materia o el codigo y carnet no existen en la bd';			
+		if(cMat=null) then
+			select 'ERROR' as Mensaje, 'Error en la operacion';			
 		else
             insert into notas values(codMate,_carnet,nota);
+            select * from notas;
 		end if;   
 	end if;
+     
     commit;
 end$$
 
 DELIMITER ;
 
-call sp_insertNotas('FICA1',12345678,9.0)
+call sp_insertNotas('DSIWEB-1',87654321,6.6)
 
