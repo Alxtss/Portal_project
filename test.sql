@@ -1,5 +1,6 @@
 -- select date_format(curdate(),"%d %b %Y")as fecha;
 
+-- consulta para determinar edad a partir de la fecha actual
 select nombre,year(curdate()) - year(alumno.fech_nac) + 
 	if(date_format(curdate(),'%m-%d')>date_format(alumno.fech_nac,'%m-%d'),0,-1) as edad from alumno;
     
@@ -21,9 +22,9 @@ insert into notas values
 ('DSIWEB-1',12345678,'7.5'),
 ('UML',12345678,'7.5'),
 ('BD-2',12345678,'7.5'),
-('FICA-1',12345678,'7.5')
+('FICA-1',12345678,'7.5');
 
-
+insert into usuario values(null,'admin','password');
 
 
 

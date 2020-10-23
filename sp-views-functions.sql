@@ -21,6 +21,15 @@ create or replace view v_materias as
     
 -- select * from v_materias
 
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- vista para consulta de
+
+create or replace view v_usuarios as
+	select * from usuario;
+
+-- select * from v_usuarios
+
 -- ---------------------------------------------------------------------------------------------------------------------
 -- creacion de procedimientos almacenados
 -- --------------------------------------------------------------------------------------------------------------------
@@ -127,6 +136,33 @@ end //
 DELIMITER ;
 
 -- call sp_addMateria('BD-1','Bases de Datos 1');
+
+-- ---------------------------------------------------------------------------------------------------------------------
+
+-- procedimiento para agregar usuarios
+
+DELIMITER //
+
+create procedure sp_addUsuario(in _user varchar(25), in _pass varchar(25))
+begin
+	declare existe int;
+    
+    select count(usuario) into existe from usuario where usuario=_user;
+    
+    if existe then
+		select 'El usuario ingresado ya existe, ingrese otro nombre de usuario' as 'Error';
+	else
+		insert into usuario values(null,_user,_pass);
+		select * from usuario;
+	end if;
+
+end//
+
+DELIMITER ;
+
+-- call sp_addUsuario('Juan','juanp123');
+
+
 
 
 
