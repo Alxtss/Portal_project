@@ -22,9 +22,9 @@ insert into notas values
 ('UML',12345678,'7.5'),
 ('BD-2',12345678,'7.5'),
 ('FICA-1',12345678,'7.5')
--- where cod_materia = materia.cod_materia;
 
 
+-- procedimiento para insertar notas 
 DELIMITER $$
 
 create procedure sp_insertNotas(in codMate char(10), in _carnet int, in nota double)
@@ -60,5 +60,32 @@ end$$
 
 DELIMITER ;
 
-call sp_insertNotas('DSIWEB-1',87654321,6.6)
+-- call sp_insertNotas('DSIWEB-1',87654321,6.6)
+
+-- view notas_alumno
+
+DELIMITER //
+
+create procedure sp_viewNotasAlumno(in _carnet int)
+begin
+	declare existe int;
+    
+    select count(carnet) into existe from alumno where carnet=_carnet;
+    
+    if existe then    
+		select a.carnet as 'N° Carnet', a.nombre as 'Nombre del Alumno', m.cod_materia as 'Codigo de Materia', n.nota 
+		from alumno a inner join notas n on a.carnet=n.carnet_alumno inner join materia m on n.cod_materia=m.cod_materia where a.carnet=_carnet;
+	else
+		select 'El carnet ingresado no existe en la BD';
+	end if;
+    commit;
+    
+end //
+
+DELIMITER ;
+
+call sp_viewNotasAlumno(87654321);
+
+
+
 
