@@ -30,33 +30,11 @@ create table notas(
     foreign key(carnet_alumno) references alumno(carnet)
 );
 
--- creacion de vistas
-
-create or replace view view_infoAlumnos as 
-	select carnet as 'N° Carnet', nombre as 'Nombre', carrera as 'Carrera', 
-    year(curdate()) - year(alumno.fech_nac) + 
-	if(date_format(curdate(),'%m-%d')>date_format(alumno.fech_nac,'%m-%d'),0,-1) as edad 
-    from alumno;
-    
--- select * from view_infoAlumnos
 
 
--- creacion de procedimientos almacenados
-
-DELIMITER $$
-create procedure sp_addAlumno(in carnet int, in nombre varchar(50), in carrera varchar(50), in fechaNac date)
-begin
-	insert into alumno values (carnet,nombre,carrera,fechaNac);
-end$$
-DELIMITER ;
-
--- call sp_addAlumno(87654321,'Alberto Rodríguez','Licenciatura en Derecho','1993-11-07');
 
 
-/*create procedure sp_addUsuarios(usuario varchar(25), clave varchar(25)) 
-begin
-	insert into usuario values(usuario,clave)
-end*/
+
 
     
 
